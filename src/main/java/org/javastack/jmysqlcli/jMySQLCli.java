@@ -84,18 +84,33 @@ public class jMySQLCli {
 			}
 			final String url = p.getProperty("url", TEST_URL);
 			try (Connection conn = createConnection(url)) {
-				final String query = p.getProperty("query", TEST_QUERY);
 				final boolean headerWanted = Boolean
 						.parseBoolean(p.getProperty("header.wanted", DEFAULT_HEADER_WANTED));
 				final String columnSeparator = p.getProperty("column.separator", DEFAULT_COLUMN_SEPARATOR);
 				final String rowSeparator = p.getProperty("row.separator", DEFAULT_ROW_SEPARATOR);
-				executeQuery(conn, query, headerWanted, columnSeparator, rowSeparator);
+				// The order is 1-based; followed by 2, and so on.
+				if (!p.getProperty("sql.1", "").isEmpty()) {
+					for (int i = 1; i < Short.MAX_VALUE; i++) {
+						final String sql = p.getProperty("sql." + i, "");
+						if (!sql.isEmpty()) {
+							execute(conn, sql, headerWanted, columnSeparator, rowSeparator);
+						} else {
+							break;
+						}
+					}
+				} else {
+					final String query = p.getProperty("query", TEST_QUERY);
+					executeQuery(conn, query, headerWanted, columnSeparator, rowSeparator);
+				}
 			}
 			if (verbose) {
 				System.err.println("### END");
 			}
 		} catch (Throwable t) {
-			t.printStackTrace(System.err);
+			System.err.println("### EXCEPTION: " + t);
+			if (verbose) {
+				t.printStackTrace(System.err);
+			}
 		}
 	}
 
@@ -120,32 +135,83 @@ public class jMySQLCli {
 			if (verbose) {
 				System.err.println("### QUERY: " + query);
 			}
-			final ResultSet rs = stmt.executeQuery(query);
-			final ResultSetMetaData md = rs.getMetaData();
-			final int columns = md.getColumnCount();
-			// Show column names
-			if (headerWanted) {
-				for (int i = 1; i <= columns; i++) {
-					System.out.print(md.getColumnLabel(i));
-					if (i < columns) {
-						System.out.print(columnSeparator);
+			try (final ResultSet rs = stmt.executeQuery(query)) {
+				final ResultSetMetaData md = rs.getMetaData();
+				final int columns = md.getColumnCount();
+				// Show column names
+				if (headerWanted) {
+					for (int i = 1; i <= columns; i++) {
+						System.out.print(md.getColumnLabel(i));
+						if (i < columns) {
+							System.out.print(columnSeparator);
+						}
 					}
+					System.out.print(rowSeparator);
 				}
-				System.out.print(rowSeparator);
-			}
-			// Show row data
-			while (rs.next()) {
-				for (int i = 1; i <= columns; i++) {
-					System.out.print(rs.getObject(i));
-					if (i < columns) {
-						System.out.print(columnSeparator);
+				// Show row data
+				while (rs.next()) {
+					for (int i = 1; i <= columns; i++) {
+						System.out.print(rs.getObject(i));
+						if (i < columns) {
+							System.out.print(columnSeparator);
+						}
 					}
+					System.out.print(rowSeparator);
 				}
-				System.out.print(rowSeparator);
+				System.out.flush();
 			}
-			System.out.flush();
 		} catch (SQLException e) {
 			System.err.println("### ERROR QUERY: " + query);
+			throw e;
+		}
+	}
+
+	private static void execute(final Connection con, //
+			final String sql, //
+			final boolean headerWanted, //
+			final String columnSeparator, //
+			final String rowSeparator) throws SQLException {
+		try (Statement stmt = con.createStatement()) {
+			if (verbose) {
+				System.err.println("### SQL: " + sql);
+			}
+			boolean haveRS = stmt.execute(sql);
+			do {
+				if (haveRS) {
+					try (final ResultSet rs = stmt.getResultSet()) {
+						final ResultSetMetaData md = rs.getMetaData();
+						final int columns = md.getColumnCount();
+						// Show column names
+						if (headerWanted) {
+							for (int i = 1; i <= columns; i++) {
+								System.out.print(md.getColumnLabel(i));
+								if (i < columns) {
+									System.out.print(columnSeparator);
+								}
+							}
+							System.out.print(rowSeparator);
+						}
+						// Show row data
+						while (rs.next()) {
+							for (int i = 1; i <= columns; i++) {
+								System.out.print(rs.getObject(i));
+								if (i < columns) {
+									System.out.print(columnSeparator);
+								}
+							}
+							System.out.print(rowSeparator);
+						}
+						System.out.flush();
+					}
+				} else {
+					final int rcount = stmt.getUpdateCount();
+					System.err.println("### UPDATE ROW COUNT: " + rcount);
+					System.err.flush();
+				}
+			} while (haveRS = stmt.getMoreResults());
+		} catch (SQLException e) {
+			System.err.println("### ERROR SQL: " + sql);
+			throw e;
 		}
 	}
 }

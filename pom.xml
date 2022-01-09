@@ -5,7 +5,7 @@
 
 	<groupId>org.javastack</groupId>
 	<artifactId>jmysqlcli</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 	<description>jmysqlcli is a simple command line client to query a mysql server</description>
 
 	<name>${project.groupId}:${project.artifactId}</name>
