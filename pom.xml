@@ -9,7 +9,7 @@
 	<description>jmysqlcli is a simple command line client to query a mysql server</description>
 
 	<name>${project.groupId}:${project.artifactId}</name>
-	<url>https://github.com/ggrandes/${project.artifactId}</url>
+	<url>https://github.com/ggrandes/jmysqlcli</url>
 	<licenses>
 		<license>
 			<name>The Apache License, Version 2.0</name>
@@ -24,9 +24,9 @@
 		</developer>
 	</developers>
 	<scm>
-		<connection>scm:git:git@github.com:ggrandes/${project.artifactId}.git</connection>
-		<developerConnection>scm:git:git@github.com:ggrandes/${project.artifactId}.git</developerConnection>
-		<url>git@github.com:ggrandes/${project.artifactId}.git</url>
+		<connection>scm:git:git@github.com:ggrandes/jmysqlcli.git</connection>
+		<developerConnection>scm:git:git@github.com:ggrandes/jmysqlcli.git</developerConnection>
+		<url>git@github.com:ggrandes/jmysqlcli.git</url>
 	</scm>
 
 	<properties>
