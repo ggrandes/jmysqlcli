@@ -8,7 +8,7 @@ jmysqlcli is a simple command line client to query a mysql server, free as beer 
 
 ## Requirements, Installation and Running
 
-* Java Runtime (8 o newer): https://jdk.java.net/java-se-ri/14
+* Java Runtime (8 o newer): https://jdk.java.net/java-se-ri/17
 * This software run in [Portable Mode](https://en.wikipedia.org/wiki/Portable_application), you only need copy jar file in a folder to run.
 
 #### Usage Example (command line)
