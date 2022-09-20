@@ -5,7 +5,7 @@
 
 	<groupId>org.javastack</groupId>
 	<artifactId>jmysqlcli</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2</version>
 	<description>jmysqlcli is a simple command line client to query a mysql server</description>
 
 	<name>${project.groupId}:${project.artifactId}</name>
@@ -40,7 +40,7 @@
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
-			<version>8.0.26</version>
+			<version>8.0.30</version>
 			<exclusions>
 				<exclusion>
 					<groupId>com.google.protobuf</groupId>
