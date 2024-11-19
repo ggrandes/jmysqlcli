@@ -33,7 +33,7 @@ jmysqlcli is a simple command line client to query a mysql server, free as beer 
 
 #### References:
 
-* JDBC Connection URL [syntax](https://dev.mysql.com/doc/connector-j/8.0/en/connector-j-reference-jdbc-url-format.html)
+* JDBC Connection URL [syntax](https://dev.mysql.com/doc/connector-j/en/connector-j-reference-jdbc-url-format.html)
 * Query statement [syntax](https://dev.mysql.com/doc/refman/8.0/en/select.html)
 * SQL statement [syntax](https://dev.mysql.com/doc/refman/8.0/en/sql-data-manipulation-statements.html)
 
