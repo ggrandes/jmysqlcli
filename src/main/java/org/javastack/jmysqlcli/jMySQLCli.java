@@ -83,7 +83,11 @@ public class jMySQLCli {
 				throw e;
 			}
 			final String url = p.getProperty("url", TEST_URL);
-			try (Connection conn = createConnection(url)) {
+			final String user = getFirstNonNull(System.getenv("MYSQL_USER"), //
+					p.getProperty("user"));
+			final String password = getFirstNonNull(System.getenv("MYSQL_PASSWORD"), //
+					p.getProperty("password"));
+			try (Connection conn = createConnection(url, user, password)) {
 				final boolean headerWanted = Boolean
 						.parseBoolean(p.getProperty("header.wanted", DEFAULT_HEADER_WANTED));
 				final String columnSeparator = p.getProperty("column.separator", DEFAULT_COLUMN_SEPARATOR);
@@ -114,12 +118,17 @@ public class jMySQLCli {
 		}
 	}
 
-	private static Connection createConnection(final String url) throws SQLException {
+	private static Connection createConnection(final String url, final String user, final String password) //
+			throws SQLException {
 		if (verbose) {
 			System.err.println("### CONNECTING: " + url);
 		}
 		try {
-			return DriverManager.getConnection(url);
+			if ((user != null) && (password != null)) {
+				return DriverManager.getConnection(url, user, password);
+			} else {
+				return DriverManager.getConnection(url);
+			}
 		} catch (SQLException e) {
 			System.err.println("### ERROR CONNECTING: " + url);
 			throw e;
@@ -164,6 +173,15 @@ public class jMySQLCli {
 			System.err.println("### ERROR QUERY: " + query);
 			throw e;
 		}
+	}
+
+	private static String getFirstNonNull(final String... values) {
+		for (final String v : values) {
+			if (v != null) {
+				return v;
+			}
+		}
+		return null;
 	}
 
 	private static void execute(final Connection con, //

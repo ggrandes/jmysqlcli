@@ -19,6 +19,9 @@ jmysqlcli is a simple command line client to query a mysql server, free as beer 
 
     # JDBC Connection URL
     url=jdbc:mysql://localhost/test?user=test&password=test
+    # credentials (alternative method 1)
+    user=test
+    password=test
     # Method 1, The query statement (only select allowed)
     query=SELECT 'OK' AS TEST
     # Method 2, A list of SQL statements (select, update, delete, etc), the order is 1-based; followed by 2, and so on.
@@ -30,6 +33,9 @@ jmysqlcli is a simple command line client to query a mysql server, free as beer 
     #column.separator=;
     # default value is LF
     #row.separator=\n
+
+
+###### You can use alternative method 2 for credentials: MYSQL_USER & MYSQL_PASSWORD environment variables. Precedence is ENV, then properties.
 
 #### References:
 
