@@ -27,6 +27,8 @@ jmysqlcli is a simple command line client to query a mysql server, free as beer 
     # Method 2, A list of SQL statements (select, update, delete, etc), the order is 1-based; followed by 2, and so on.
     sql.1=SELECT 'OK' AS TEST
     sql.2=SELECT 'GOOD' AS TEST
+    # format output in [CSV,HTML,MarkdownTable,AsciiTable], default is CSV
+    format.output=CSV
     # default is show header row
     #header.wanted=true
     # default value is semicolon
